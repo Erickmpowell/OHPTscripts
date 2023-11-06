@@ -9,15 +9,19 @@ def parsedat(path):
     
     vars = []
     headerlen = 0
-    for line_i in lines[0:100]:
+    for line_i in lines:
 
         if "ZONE" == line_i[:4]:
             break
 
         headerlen += 1 
         varsplit = line_i.split('"')[-2]
-        vars.append(varsplit)
+        vars.append(varsplit.lower())
 
+    for line_i in lines[headerlen:]:
+        headerlen += 1
+        if "DT=(" in line_i:
+            break
     return vars, headerlen+2
 
 
@@ -41,15 +45,15 @@ def getSWMFdata(Path, Configuration="BATSRUS"):
 class PlasmaFluid_OH:
     def __init__(self, data, varlist):
 
-        den_i = varlist.index("Rho amu/cm3")
-        vx_i  = varlist.index("U_x km/s")
-        vy_i  = varlist.index("U_y km/s")
-        vz_i  = varlist.index("U_z km/s")
-        p_i   = varlist.index("P dyne/cm^2")
-        bx_i  = varlist.index("B_x nT")
-        by_i  = varlist.index("B_y nT")
-        bz_i  = varlist.index("B_z nT")
-        HP_i  = varlist.index( "Hplim amu/cm3")
+        den_i = varlist.index("rho amu/cm3")
+        vx_i  = varlist.index("u_x km/s")
+        vy_i  = varlist.index("u_y km/s")
+        vz_i  = varlist.index("u_z km/s")
+        p_i   = varlist.index("p dyne/cm^2")
+        bx_i  = varlist.index("b_x nt")
+        by_i  = varlist.index("b_y nt")
+        bz_i  = varlist.index("b_z nt")
+        HP_i  = varlist.index( "hplim amu/cm3")
         
         self.den = data[den_i]
         self.vx = data[vx_i]
@@ -95,11 +99,11 @@ class NeutralFluid_OH:
         else:
             pop_i = str(pop_i)
             
-        den_i = varlist.index("Rho^Ne" + pop_i + " amu/cm3")
-        vx_i  =varlist.index("U_x^Ne" + pop_i + " km/s")
-        vy_i =varlist.index("U_y^Ne" + pop_i + " km/s")
-        vz_i =varlist.index("U_z^Ne" + pop_i + " km/s")
-        p_i = varlist.index("P^Ne" + pop_i + " dyne/cm^2")
+        den_i = varlist.index("rho^ne" + pop_i + " amu/cm3")
+        vx_i  =varlist.index("u_x^ne" + pop_i + " km/s")
+        vy_i =varlist.index("u_y^ne" + pop_i + " km/s")
+        vz_i =varlist.index("u_z^ne" + pop_i + " km/s")
+        p_i = varlist.index("p^ne" + pop_i + " dyne/cm^2")
         
         
         self.den = data[den_i]
@@ -121,14 +125,17 @@ class NeutralFluid_FLEKS:
 
         pop_i = str(pop_i)
             
-        den_i = varlist.index("rhoPop" + pop_i )
-        vx_i  = varlist.index("uxPop" + pop_i )
-        vy_i = varlist.index("uyPop" + pop_i )
-        vz_i = varlist.index("uzPop" + pop_i)
-        ppc_i = varlist.index("ppcPop"+pop_i)
-        p_xx_i = varlist.index("pxxPop" + pop_i ) 
-        p_yy_i = varlist.index("pyyPop" + pop_i )
-        p_zz_i = varlist.index("pzzPop" + pop_i )
+        den_i = varlist.index("rhopop" + pop_i )
+        vx_i  = varlist.index("uxpop" + pop_i )
+        vy_i = varlist.index("uypop" + pop_i )
+        vz_i = varlist.index("uzpop" + pop_i)
+        try:
+            ppc_i = varlist.index("ppcpop"+pop_i)
+        except:
+            ppc_i = varlist.index("numpop"+pop_i)
+        p_xx_i = varlist.index("pxxpop" + pop_i ) 
+        p_yy_i = varlist.index("pyypop" + pop_i )
+        p_zz_i = varlist.index("pzzpop" + pop_i )
 
         
         self.den = data[den_i]
@@ -148,9 +155,9 @@ class NeutralFluid_FLEKS:
 class BATSRUSdata_SI:
     def __init__(self, data,varlist):
         
-        self.x = data[varlist.index("X AU")]
-        self.y = data[varlist.index("Y AU")]
-        self.z = data[varlist.index("Z AU")]
+        self.x = data[varlist.index("x au")]
+        self.y = data[varlist.index("y au")]
+        self.z = data[varlist.index("z au")]
         self.plasma = PlasmaFluid_OH(data,varlist)
         self.n1 = NeutralFluid_OH(data,varlist,pop_i = 1)
         self.n2 = NeutralFluid_OH(data,varlist,pop_i = 2)
@@ -160,9 +167,18 @@ class BATSRUSdata_SI:
     
 class OHPTdata:
     def __init__(self, data,varlist):
-        self.x = data[varlist.index("X")]
-        self.y = data[varlist.index("Y")]
-        self.z = data[varlist.index("Z")]
+        try:
+            self.x = data[varlist.index("x")]
+        except:
+            pass
+        try:
+            self.y = data[varlist.index("y")]
+        except:
+            pass
+        try:
+            self.z = data[varlist.index("z")]
+        except:
+            pass
         self.n1 = NeutralFluid_FLEKS(data,varlist,pop_i = 1)
         self.n2 = NeutralFluid_FLEKS(data,varlist,pop_i = 2)
         self.n3 = NeutralFluid_FLEKS(data,varlist,pop_i = 3)
@@ -181,4 +197,4 @@ class OHPTdata:
         return temp
         
 #BATS = getSWMFdata("BATSRUS.dat")
-#FLEKS = getSWMFdata("FLEKS_smooth0.dat","OHPT")
+FLEKS = getSWMFdata("FLEKS_Smooth_10_0_5","OHPT")
