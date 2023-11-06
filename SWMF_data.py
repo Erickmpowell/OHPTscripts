@@ -11,7 +11,7 @@ def parsedat(path):
     headerlen = 0
     for line_i in lines[0:100]:
 
-        if "ZONE\n" == line_i:
+        if "ZONE" == line_i[:4]:
             break
 
         headerlen += 1 
