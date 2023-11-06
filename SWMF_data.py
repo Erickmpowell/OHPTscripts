@@ -197,4 +197,4 @@ class OHPTdata:
         return temp
         
 #BATS = getSWMFdata("BATSRUS.dat")
-FLEKS = getSWMFdata("FLEKS_Smooth_10_0_5","OHPT")
+#FLEKS = getSWMFdata("FLEKS_Smooth_10_0_5","OHPT")
