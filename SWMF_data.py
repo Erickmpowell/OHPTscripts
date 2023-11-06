@@ -5,11 +5,14 @@ def parsedat(path):
     with open(path, "r") as f:
         lines = f.readlines()
 
-    firstline = lines[0].split('"')
+    if "variable" in lines[0].lower():
+        beginningline = 0
+    else:
+        beginningline = 1 
     
     vars = []
     headerlen = 0
-    for line_i in lines:
+    for line_i in lines[beginningline:]:
 
         if "ZONE" == line_i[:4]:
             break
@@ -22,7 +25,7 @@ def parsedat(path):
         headerlen += 1
         if "DT=(" in line_i:
             break
-    return vars, headerlen+2
+    return vars, headerlen
 
 
 def getSWMFdata(Path, Configuration="BATSRUS"):
@@ -133,16 +136,23 @@ class NeutralFluid_FLEKS:
             ppc_i = varlist.index("ppcpop"+pop_i)
         except:
             ppc_i = varlist.index("numpop"+pop_i)
-        p_xx_i = varlist.index("pxxpop" + pop_i ) 
-        p_yy_i = varlist.index("pyypop" + pop_i )
-        p_zz_i = varlist.index("pzzpop" + pop_i )
+
+        try:
+            p_i = varlist.index("ppop" + pop_i )
+            
+            self.p = data[p_i]
+
+        except:
+            p_xx_i = varlist.index("pxxpop" + pop_i ) 
+            p_yy_i = varlist.index("pyypop" + pop_i )
+            p_zz_i = varlist.index("pzzpop" + pop_i )
+            self.p =  1/3*(data[p_xx_i] + data[p_xx_i] + data[p_xx_i])
 
         
         self.den = data[den_i]
         self.vx = data[vx_i]
         self.vy = data[vy_i]
         self.vz = data[vz_i]
-        self.p =  1/3*(data[p_xx_i] + data[p_xx_i] + data[p_xx_i])
 
 
     def vel(self):
@@ -197,4 +207,6 @@ class OHPTdata:
         return temp
         
 #BATS = getSWMFdata("BATSRUS.dat")
-#FLEKS = getSWMFdata("FLEKS_Smooth_10_0_5","OHPT")
+#FLEKS1 = getSWMFdata("FLEKS_Smooth_10_0_5","OHPT")
+#FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
+#print(FLEKS1.n1.den[:10],FLEKS2.n1.den[:10])
