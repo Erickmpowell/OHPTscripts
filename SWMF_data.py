@@ -27,10 +27,24 @@ def parsedat(path):
             break
     return vars, headerlen
 
+def parseout(path):
+    with open(path, "r") as f:
+        lines = f.readlines()
+
+    vars_line = lines[4].lower()
+    vars = vars_line.split()
+
+    beginningline = 1 
+    headerlen = 5
+    return vars, headerlen
 
 def getSWMFdata(Path, Configuration="BATSRUS"):
 
-    varlist, headerlen = parsedat(Path)
+    if ".dat" in Path[-4:]:
+        varlist, headerlen = parsedat(Path)
+    if ".out" in Path[-4:]:
+        varlist, headerlen = parseout(Path)
+        
     print(varlist, headerlen)
 
     data = np.loadtxt(Path, unpack=True, skiprows=headerlen)
@@ -209,4 +223,5 @@ class OHPTdata:
 #BATS = getSWMFdata("BATSRUS.dat")
 #FLEKS1 = getSWMFdata("FLEKS_Smooth_10_0_5","OHPT")
 #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
+FLEKS_out = getSWMFdata("cut.out","OHPT")
 #print(FLEKS1.n1.den[:10],FLEKS2.n1.den[:10])
