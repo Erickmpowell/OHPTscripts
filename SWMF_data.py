@@ -223,5 +223,5 @@ class OHPTdata:
 #BATS = getSWMFdata("BATSRUS.dat")
 #FLEKS1 = getSWMFdata("FLEKS_Smooth_10_0_5","OHPT")
 #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
-FLEKS_out = getSWMFdata("cut.out","OHPT")
+#FLEKS_out = getSWMFdata("cut.out","OHPT")
 #print(FLEKS1.n1.den[:10],FLEKS2.n1.den[:10])
