@@ -213,19 +213,29 @@ class OHPTdata:
         return self.n1.den + self.n2.den + self.n3.den + self.n4.den
     
     def vel_total(self):
-        print(self.n1.den[0], self.n1.vel()[0])
-        print(self.n2.den[0], self.n2.vel()[0])
-        print(self.n3.den[0], self.n3.vel()[0])
-        print(self.n4.den[0], self.n4.vel()[0])
+        print(self.x[-1])
+        print(self.n1.den[-1], self.n1.vel()[-1])
+        print(self.n2.den[-1], self.n2.vel()[-1])
+        print(self.n3.den[-1], self.n3.vel()[-1])
+        print(self.n4.den[-1], self.n4.vel()[-1])
         velocity = (self.n1.den * self.n1.vel() + self.n2.den* self.n2.vel() + self.n3.den * self.n3.vel() + self.n4.den * self.n4.vel())/self.den_total()
         return velocity 
+
+    def vx_total(self):
+        print(self.n1.den[-1], self.n1.vx[-1])
+        print(self.n2.den[-1], self.n2.vx[-1])
+        print(self.n3.den[-1], self.n3.vx[-1])
+        print(self.n4.den[-1], self.n4.vx[-1])
+        velocity = (self.n1.den * self.n1.vx + self.n2.den* self.n2.vx + self.n3.den * self.n3.vx + self.n4.den * self.n4.vx)/self.den_total()
+        return velocity 
+
     
     def temp_total(self):
         temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp() + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.den_total()
         return temp
         
 #BATS = getSWMFdata("BATSRUS.dat")
-#FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
+FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
 #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
 #FLEKS_out = getSWMFdata("cut.out","OHPT")
 #print(FLEKS1.n1.den[:10],FLEKS2.n1.den[:10])
