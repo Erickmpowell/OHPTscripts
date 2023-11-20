@@ -170,7 +170,7 @@ class NeutralFluid_FLEKS:
 
 
     def vel(self):
-        return np.sqrt((self.vx)**2 + (self.vx)**2 + (self.vx)**2)
+        return np.sqrt((self.vx)**2 + (self.vy)**2 + (self.vz)**2)
 
     def temp(self):
         return (self.p * 1E-9/(self.den*100**3 * 1.38E-23))    
@@ -213,6 +213,10 @@ class OHPTdata:
         return self.n1.den + self.n2.den + self.n3.den + self.n4.den
     
     def vel_total(self):
+        print(self.n1.den[0], self.n1.vel()[0])
+        print(self.n2.den[0], self.n2.vel()[0])
+        print(self.n3.den[0], self.n3.vel()[0])
+        print(self.n4.den[0], self.n4.vel()[0])
         velocity = (self.n1.den * self.n1.vel() + self.n2.den* self.n2.vel() + self.n3.den * self.n3.vel() + self.n4.den * self.n4.vel())/self.den_total()
         return velocity 
     
@@ -221,7 +225,7 @@ class OHPTdata:
         return temp
         
 #BATS = getSWMFdata("BATSRUS.dat")
-#FLEKS1 = getSWMFdata("FLEKS_Smooth_10_0_5","OHPT")
+#FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
 #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
 #FLEKS_out = getSWMFdata("cut.out","OHPT")
 #print(FLEKS1.n1.den[:10],FLEKS2.n1.den[:10])
