@@ -233,9 +233,10 @@ class OHPTdata:
     def temp_total(self):
         temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp() + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.den_total()
         return temp
-        
+
+
 #BATS = getSWMFdata("BATSRUS.dat")
-FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
+#FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
 #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
 #FLEKS_out = getSWMFdata("cut.out","OHPT")
 #print(FLEKS1.n1.den[:10],FLEKS2.n1.den[:10])
