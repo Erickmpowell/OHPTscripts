@@ -238,8 +238,12 @@ class OHPTdata:
         return temp
 
 try:
+    #For debugging and so I dont break it when I push the code lol
     #BATS = getSWMFdata("BATSRUS.dat")
     #FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
     #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
     #FLEKS_out = getSWMFdata("cut.out","OHPT")
     #print(FLEKS1.n1.den[:10],FLEKS2.n1.den[:10])
+    pass
+except:
+    pass
