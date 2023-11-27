@@ -160,9 +160,10 @@ class NeutralFluid_FLEKS:
             p_xx_i = varlist.index("pxxpop" + pop_i ) 
             p_yy_i = varlist.index("pyypop" + pop_i )
             p_zz_i = varlist.index("pzzpop" + pop_i )
-            self.p =  1/3*(data[p_xx_i] + data[p_xx_i] + data[p_xx_i])
+            self.p =  1/3*(data[p_xx_i] + data[p_yy_i] + data[p_zz_i])
 
-        
+
+        self.popi = pop_i
         self.den = data[den_i]
         self.vx = data[vx_i]
         self.vy = data[vy_i]
@@ -172,9 +173,11 @@ class NeutralFluid_FLEKS:
     def vel(self):
         return np.sqrt((self.vx)**2 + (self.vy)**2 + (self.vz)**2)
 
-    def temp(self):
-        temp =np.nan_to_num( (self.p /self.den) * 1E8/ 1.38)
-        
+    def temp(self,pop2factor=1):
+        if self.popi == "2":
+            temp =np.nan_to_num( pop2factor * (self.p /self.den) * 1E8/ 1.38)
+        else:
+            temp =np.nan_to_num( (self.p /self.den) * 1E8/ 1.38)
         return temp
     
 
@@ -210,7 +213,9 @@ class OHPTdata:
         self.n3 = NeutralFluid_FLEKS(data,varlist,pop_i = 3)
         self.n4 = NeutralFluid_FLEKS(data,varlist,pop_i = 4)
 
-
+    def p_total(self):
+        return self.n1.p + self.n2.p + self.n3.p + self.n4.p
+    
     def den_total(self):
         return self.n1.den + self.n2.den + self.n3.den + self.n4.den
     
@@ -223,8 +228,8 @@ class OHPTdata:
         return velocity 
 
     
-    def temp_total(self):
-        temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp() + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.den_total()
+    def temp_total(self,pop2factor=1):
+        temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp(pop2factor) + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.den_total()
         return temp
 
 try:
