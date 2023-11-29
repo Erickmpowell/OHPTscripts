@@ -146,10 +146,23 @@ class NeutralFluid_FLEKS:
         vx_i  = varlist.index("uxpop" + pop_i )
         vy_i = varlist.index("uypop" + pop_i )
         vz_i = varlist.index("uzpop" + pop_i)
+        p_xx_i = varlist.index("pxxpop" + pop_i ) 
+        p_yy_i = varlist.index("pyypop" + pop_i )
+        p_zz_i = varlist.index("pzzpop" + pop_i )
+
         try:
             ppc_i = varlist.index("ppcpop"+pop_i)
         except:
             ppc_i = varlist.index("numpop"+pop_i)
+    
+        self.pxx = data[p_xx_i]
+        self.pyy = data[p_yy_i]
+        self.pzz = data[p_zz_i]
+        self.popi = pop_i
+        self.den = data[den_i]
+        self.vx = data[vx_i]
+        self.vy = data[vy_i]
+        self.vz = data[vz_i]
 
         try:
             p_i = varlist.index("ppop" + pop_i )
@@ -157,18 +170,9 @@ class NeutralFluid_FLEKS:
             self.p = data[p_i]
 
         except:
-            p_xx_i = varlist.index("pxxpop" + pop_i ) 
-            p_yy_i = varlist.index("pyypop" + pop_i )
-            p_zz_i = varlist.index("pzzpop" + pop_i )
             self.p =  1/3*(data[p_xx_i] + data[p_yy_i] + data[p_zz_i])
 
-
-        self.popi = pop_i
-        self.den = data[den_i]
-        self.vx = data[vx_i]
-        self.vy = data[vy_i]
-        self.vz = data[vz_i]
-
+        
 
     def vel(self):
         return np.sqrt((self.vx)**2 + (self.vy)**2 + (self.vz)**2)
@@ -225,9 +229,51 @@ class OHPTdata:
 
     def vx_total(self):
         velocity = (self.n1.den * self.n1.vx + self.n2.den* self.n2.vx + self.n3.den * self.n3.vx + self.n4.den * self.n4.vx)/self.den_total()
+        return velocity
+
+    
+    def vy_total(self):
+        velocity = (self.n1.den * self.n1.vy + self.n2.den* self.n2.vy + self.n3.den * self.n3.vy + self.n4.den * self.n4.vy)/self.den_total()
         return velocity 
 
     
+    def vz_total(self):
+        velocity = (self.n1.den * self.n1.vz + self.n2.den* self.n2.vz + self.n3.den * self.n3.vz + self.n4.den * self.n4.vz)/self.den_total()
+        return velocity 
+
+    
+    def true_Pxx(self):
+        Full_pxx = (self.n1.pxx + self.n2.pxx + self.n3.pxx + self.n4.pxx)*1E-9   +\
+        (self.n1.den * (self.n1.vx - self.vx_total())**2 +\
+        self.n2.den * (self.n2.vx - self.vx_total())**2 +\
+        self.n3.den * (self.n3.vx - self.vx_total())**2 +\
+        self.n4.den * (self.n4.vx - self.vx_total())**2)* 1.67e-27* (1000**2)* (100**3)
+
+        return Full_pxx
+
+    def true_Pyy(self):
+        Full_pyy = (self.n1.pyy + self.n2.pyy + self.n3.pyy + self.n4.pyy)*1E-9  +\
+        (self.n1.den * (self.n1.vy - self.vy_total())**2 +\
+        self.n2.den * (self.n2.vy - self.vy_total())**2 +\
+        self.n3.den * (self.n3.vy - self.vy_total())**2 +\
+        self.n4.den * (self.n4.vy - self.vy_total())**2)* 1.67e-27* (1000**2)* (100**3)
+
+        return Full_pyy
+    
+    def true_Pzz(self):
+        Full_pzz = (self.n1.pzz + self.n2.pzz + self.n3.pzz + self.n4.pzz)*1E-9  +\
+        (self.n1.den * (self.n1.vz - self.vz_total())**2 +\
+        self.n2.den * (self.n2.vz - self.vz_total())**2 +\
+        self.n3.den * (self.n3.vz - self.vz_total())**2 +\
+        self.n4.den * (self.n4.vz - self.vz_total())**2)* 1.67e-27* (1000**2)* (100**3)
+
+        return Full_pzz
+
+    def true_temp(self):
+        total_pressure = 1/3*(self.true_Pxx() + self.true_Pyy() + self.true_Pzz()) 
+        temp = total_pressure/(self.den_total()* (100**3)* 1.38E-23) 
+        return temp
+
     def temp_total(self,pop2factor=1):
         temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp(pop2factor) + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.den_total()
         return temp
