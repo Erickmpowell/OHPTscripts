@@ -222,6 +222,13 @@ class OHPTdata:
     
     def den_total(self):
         return self.n1.den + self.n2.den + self.n3.den + self.n4.den
+
+    def vel_total_2(self):
+        vx =(self.n1.den * self.n1.vx + self.n2.den* self.n2.vx + self.n3.den * self.n3.vx + self.n4.den * self.n4.vx)/self.den_total()
+        vy =(self.n1.den * self.n1.vy + self.n2.den* self.n2.vy + self.n3.den * self.n3.vy + self.n4.den * self.n4.vy)/self.den_total()
+        vz = (self.n1.den * self.n1.vz + self.n2.den* self.n2.vz + self.n3.den * self.n3.vz + self.n4.den * self.n4.vz)/self.den_total()
+        velocity = np.sqrt(vx**2 + vy**2 + vz**2)
+        return velocity 
     
     def vel_total(self):
         velocity = (self.n1.den * self.n1.vel() + self.n2.den* self.n2.vel() + self.n3.den * self.n3.vel() + self.n4.den * self.n4.vel())/self.den_total()
