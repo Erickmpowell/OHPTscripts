@@ -188,9 +188,19 @@ class NeutralFluid_FLEKS:
 class BATSRUSdata_SI:
     def __init__(self, data,varlist):
         
-        self.x = data[varlist.index("x au")]
-        self.y = data[varlist.index("y au")]
-        self.z = data[varlist.index("z au")]
+        try:
+            self.x = data[varlist.index("x")]
+        except:
+            pass
+        try:
+            self.y = data[varlist.index("y")]
+        except:
+            pass
+        try:
+            self.z = data[varlist.index("z")]
+        except:
+            pass
+        
         self.plasma = PlasmaFluid_OH(data,varlist)
         self.n1 = NeutralFluid_OH(data,varlist,pop_i = 1)
         self.n2 = NeutralFluid_OH(data,varlist,pop_i = 2)
@@ -288,6 +298,7 @@ class OHPTdata:
 try:
     #For debugging and so I dont break it when I push the code lol
     #BATS = getSWMFdata("BATSRUS.dat")
+    BATS = getSWMFdata("MF_line.dat")
     #FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
     #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
     #FLEKS_out = getSWMFdata("cut.out","OHPT")
