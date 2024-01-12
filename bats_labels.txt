@@ -1,0 +1,56 @@
+#Version template
+
+X
+Y
+Z
+PlasmaRho
+PUx
+Puy
+PUz
+Pp
+Pbx
+Pby
+Pbz
+HPlim
+NeutralPop(population#)Rho
+NeutralPop(population#)Ux
+NeutralPop(population#)Uy
+NeutralPop(population#)Uz
+NeutralPop(population#)P
+#Version BATSRUS1
+x au
+y au
+z au
+rho amu/cm3      
+u_x km/s         
+u_y km/s         
+u_z km/s         
+p dyne/cm^2      
+b_x nt           
+b_y nt           
+b_z nt           
+hplim amu/cm3
+rho^ne# amu/cm3    
+u_x^ne# km/s        
+u_y^ne# km/s        
+u_z^ne# km/s         
+p^ne# dyne/cm^2
+
+#Version BATSRUS2
+x
+y
+z
+Rho
+Ux
+Uy
+Uz
+P
+Bx
+By
+Bz
+Hplim
+Ne#Rho
+Ne#Ux
+Ne#Uy
+Ne#Uz
+Ne#P
