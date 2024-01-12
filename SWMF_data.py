@@ -38,15 +38,40 @@ def parseout(path):
     headerlen = 5
     return vars, headerlen
 
-def getSWMFdata(Path, Configuration="BATSRUS"):
+def parselabels(path="bats_labels.txt",version="BATSRUS1"):
+    labels = []
+
+    with open(path,"r") as labelfile:
+        lines = labelfile.read().splitlines()
+
+    rightlines = False
+    for line_i in lines:
+        if rightlines:
+                labels.append(line_i.strip().lower())
+    
+        if "#Version" in line_i:
+
+            version_i = line_i.split("#Version ")[-1]
+            if  version in version_i:
+                rightlines = True
+            else:
+                rightlines = False
+    if "" in labels:
+        labels.remove("")
+
+    return labels
+
+def getSWMFdata(Path, Configuration="BATSRUS",version="BATSRUS1"):
 
     if ".dat" in Path[-4:]:
         varlist, headerlen = parsedat(Path)
     if ".out" in Path[-4:]:
         varlist, headerlen = parseout(Path)
-        
-    print(varlist, headerlen)
 
+    labels = parselabels(version = version)
+    
+    print(varlist, headerlen)
+    print(labels)
     data = np.loadtxt(Path, unpack=True, skiprows=headerlen)
     print(data)
 
@@ -54,23 +79,34 @@ def getSWMFdata(Path, Configuration="BATSRUS"):
         data_class = OHPTdata(data,varlist)
         
     if Configuration == "BATSRUS":
-        data_class = BATSRUSdata_SI(data,varlist)
+        data_class = BATSRUSdata_SI(data,varlist,labels)
         
     return data_class
 
 
 class PlasmaFluid_OH:
-    def __init__(self, data, varlist):
+    def __init__(self, data, varlist,labels):
 
-        den_i = varlist.index("rho amu/cm3")
-        vx_i  = varlist.index("u_x km/s")
-        vy_i  = varlist.index("u_y km/s")
-        vz_i  = varlist.index("u_z km/s")
-        p_i   = varlist.index("p dyne/cm^2")
-        bx_i  = varlist.index("b_x nt")
-        by_i  = varlist.index("b_y nt")
-        bz_i  = varlist.index("b_z nt")
-        HP_i  = varlist.index( "hplim amu/cm3")
+        den_label = labels[3]
+        vx_label  = labels[4]
+        vy_label  = labels[5]
+        vz_label  = labels[6]
+        p_label   = labels[7]
+        bx_label  = labels[8]
+        by_label  = labels[9]
+        bz_label  = labels[10]
+        HP_label  = labels[11]
+        
+        
+        den_i = varlist.index(den_label)
+        vx_i  = varlist.index(vx_label) 
+        vy_i  = varlist.index(vy_label) 
+        vz_i  = varlist.index(vz_label) 
+        p_i   = varlist.index(p_label)  
+        bx_i  = varlist.index(bx_label) 
+        by_i  = varlist.index(by_label) 
+        bz_i  = varlist.index(bz_label) 
+        HP_i  = varlist.index(HP_label) 
         
         self.den = data[den_i]
         self.vx = data[vx_i]
@@ -109,18 +145,24 @@ class PlasmaFluid_OH:
 
     
 class NeutralFluid_OH:
-    def __init__(self, data, varlist,pop_i):
+    def __init__(self, data, varlist,labels,pop_i):
 
         if pop_i == 1:
             pop_i = "u"
         else:
             pop_i = str(pop_i)
-            
-        den_i = varlist.index("rho^ne" + pop_i + " amu/cm3")
-        vx_i  =varlist.index("u_x^ne" + pop_i + " km/s")
-        vy_i =varlist.index("u_y^ne" + pop_i + " km/s")
-        vz_i =varlist.index("u_z^ne" + pop_i + " km/s")
-        p_i = varlist.index("p^ne" + pop_i + " dyne/cm^2")
+
+        den_label = labels[12].replace("#",pop_i)
+        vx_label  = labels[13].replace("#",pop_i)
+        vy_label  = labels[14].replace("#",pop_i)
+        vz_label  = labels[15].replace("#",pop_i)
+        p_label   = labels[16].replace("#",pop_i)
+        
+        den_i = varlist.index(den_label)
+        vx_i  = varlist.index(vx_label)
+        vy_i  = varlist.index(vy_label)
+        vz_i  = varlist.index(vz_label)
+        p_i   = varlist.index(p_label)
         
         
         self.den = data[den_i]
@@ -131,7 +173,7 @@ class NeutralFluid_OH:
 
 
     def vel(self):
-        return np.sqrt((self.vx)**2 + (self.vx)**2 + (self.vx)**2)
+        return np.sqrt((self.vx)**2 + (self.vy)**2 + (self.vz)**2)
 
     def temp(self):
         return (self.p/self.den)
@@ -186,7 +228,7 @@ class NeutralFluid_FLEKS:
     
 
 class BATSRUSdata_SI:
-    def __init__(self, data,varlist):
+    def __init__(self, data,varlist,labels):
         
         try:
             self.x = data[varlist.index("x")]
@@ -200,12 +242,11 @@ class BATSRUSdata_SI:
             self.z = data[varlist.index("z")]
         except:
             pass
-        
-        self.plasma = PlasmaFluid_OH(data,varlist)
-        self.n1 = NeutralFluid_OH(data,varlist,pop_i = 1)
-        self.n2 = NeutralFluid_OH(data,varlist,pop_i = 2)
-        self.n3 = NeutralFluid_OH(data,varlist,pop_i = 3)
-        self.n4 = NeutralFluid_OH(data,varlist,pop_i = 4)
+        self.plasma = PlasmaFluid_OH(data,varlist,labels)
+        self.n1 = NeutralFluid_OH(data,varlist,labels,pop_i = 1)
+        self.n2 = NeutralFluid_OH(data,varlist,labels,pop_i = 2)
+        self.n3 = NeutralFluid_OH(data,varlist,labels,pop_i = 3)
+        self.n4 = NeutralFluid_OH(data,varlist,labels,pop_i = 4)
 
     
 class OHPTdata:
@@ -298,7 +339,7 @@ class OHPTdata:
 try:
     #For debugging and so I dont break it when I push the code lol
     #BATS = getSWMFdata("BATSRUS.dat")
-    BATS = getSWMFdata("MF_line.dat")
+    BATS = getSWMFdata("MF_line.dat","BATSRUS")
     #FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
     #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
     #FLEKS_out = getSWMFdata("cut.out","OHPT")
