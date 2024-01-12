@@ -68,10 +68,9 @@ def getSWMFdata(Path, Configuration="BATSRUS",version="BATSRUS1"):
     if ".out" in Path[-4:]:
         varlist, headerlen = parseout(Path)
 
-    labels = parselabels(version = version)
     
     print(varlist, headerlen)
-    print(labels)
+    
     data = np.loadtxt(Path, unpack=True, skiprows=headerlen)
     print(data)
 
@@ -79,6 +78,8 @@ def getSWMFdata(Path, Configuration="BATSRUS",version="BATSRUS1"):
         data_class = OHPTdata(data,varlist)
         
     if Configuration == "BATSRUS":
+        labels = parselabels(version = version)
+        print(labels)
         data_class = BATSRUSdata_SI(data,varlist,labels)
         
     return data_class
@@ -339,7 +340,7 @@ class OHPTdata:
 try:
     #For debugging and so I dont break it when I push the code lol
     #BATS = getSWMFdata("BATSRUS.dat")
-    BATS = getSWMFdata("MF_line.dat","BATSRUS")
+    #BATS = getSWMFdata("MF_line.dat","BATSRUS")
     #FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
     #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
     #FLEKS_out = getSWMFdata("cut.out","OHPT")
