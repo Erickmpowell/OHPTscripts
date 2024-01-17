@@ -1,5 +1,5 @@
 import numpy as np
-
+import os
 
 def parsedat(path):
     with open(path, "r") as f:
@@ -39,9 +39,10 @@ def parseout(path):
     return vars, headerlen
 
 def parselabels(path="bats_labels.txt",version="BATSRUS1"):
+    mydir =os.path.dirname(__file__)
     labels = []
 
-    with open(path,"r") as labelfile:
+    with open(mydir+path,"r") as labelfile:
         lines = labelfile.read().splitlines()
 
     rightlines = False
@@ -338,6 +339,7 @@ class OHPTdata:
         return temp
 
 try:
+
     #For debugging and so I dont break it when I push the code lol
     #BATS = getSWMFdata("BATSRUS.dat")
     #BATS = getSWMFdata("MF_line.dat","BATSRUS")
