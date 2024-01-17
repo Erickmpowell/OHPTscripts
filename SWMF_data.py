@@ -42,7 +42,7 @@ def parselabels(path="bats_labels.txt",version="BATSRUS1"):
     mydir =os.path.dirname(__file__)
     labels = []
 
-    with open(mydir+path,"r") as labelfile:
+    with open(mydir+"/"+path,"r") as labelfile:
         lines = labelfile.read().splitlines()
 
     rightlines = False
