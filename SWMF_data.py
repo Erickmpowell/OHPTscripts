@@ -178,7 +178,7 @@ class NeutralFluid_OH:
         return np.sqrt((self.vx)**2 + (self.vy)**2 + (self.vz)**2)
 
     def temp(self):
-        return (self.p/self.den)
+        return (self.p/self.den) * (1e16/1.38)
 
 
 class NeutralFluid_FLEKS:
