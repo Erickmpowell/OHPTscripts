@@ -128,7 +128,7 @@ class PlasmaFluid_OH:
         return np.sqrt((self.vx)**2 + (self.vy)**2 + (self.vz)**2)
 
     def temp(self):
-        return (7.2464E15 * self.p/self.den)
+        return (3.62319E15 * self.p/self.den)
 
     def Cs(self):
         return 1E-5 * np.sqrt( 5/3 * self.p / (self.den * 1.673E-24) )
