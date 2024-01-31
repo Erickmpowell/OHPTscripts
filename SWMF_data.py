@@ -261,8 +261,8 @@ class BATSRUSdata_SI:
         velocity = np.sqrt(vx**2 + vy**2 + vz**2)
         return velocity
 
-    def H_temp(self,pop2factor=1):
-        temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp(pop2factor) + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.H_den()
+    def H_temp(self):
+        temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp() + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.H_den()
         return temp
         
         
