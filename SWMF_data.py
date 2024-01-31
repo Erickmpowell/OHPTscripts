@@ -233,15 +233,15 @@ class NeutralFluid_FLEKS:
 class BATSRUSdata_SI:
     def __init__(self, data,varlist,labels,plasmaonly):
         try:
-            self.x = data[varlist.index("x")]
+            self.x = data[varlist.index(labels[0])]
         except:
             pass
         try:
-            self.y = data[varlist.index("y")]
+            self.y = data[varlist.index(labels[1])]
         except:
             pass
         try:
-            self.z = data[varlist.index("z")]
+            self.z = data[varlist.index(labels[2])]
         except:
             pass
         self.plasma = PlasmaFluid_OH(data,varlist,labels)
