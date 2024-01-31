@@ -263,7 +263,7 @@ class BATSRUSdata_SI:
 
     def H_temp(self,pop2factor=1):
         temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp(pop2factor) + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.H_den()
-         return temp
+        return temp
         
         
 class OHPTdata:
@@ -357,7 +357,7 @@ try:
 
     #For debugging and so I dont break it when I push the code lol
     #BATS = getSWMFdata("BATSRUS.dat")
-    #BATS = getSWMFdata("MF_line.dat","BATSRUS")
+    BATS = getSWMFdata("MF_line.dat","BATSRUS")
     #FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
     #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
     #FLEKS_out = getSWMFdata("cut.out","OHPT")
