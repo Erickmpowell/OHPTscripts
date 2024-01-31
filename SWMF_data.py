@@ -232,7 +232,6 @@ class NeutralFluid_FLEKS:
 
 class BATSRUSdata_SI:
     def __init__(self, data,varlist,labels,plasmaonly):
-        
         try:
             self.x = data[varlist.index("x")]
         except:
@@ -246,26 +245,27 @@ class BATSRUSdata_SI:
         except:
             pass
         self.plasma = PlasmaFluid_OH(data,varlist,labels)
+        print(plasmaonly)
         if not(plasmaonly):
             self.n1 = NeutralFluid_OH(data,varlist,labels,pop_i = 1)
             self.n2 = NeutralFluid_OH(data,varlist,labels,pop_i = 2)
             self.n3 = NeutralFluid_OH(data,varlist,labels,pop_i = 3)
             self.n4 = NeutralFluid_OH(data,varlist,labels,pop_i = 4)
 
-
-            def H_den(self):
-                return self.n1.den + self.n2.den + self.n3.den + self.n4.den
-
-            def H_vel(self):
-                vx =(self.n1.den * self.n1.vx + self.n2.den* self.n2.vx + self.n3.den * self.n3.vx + self.n4.den * self.n4.vx)/self.H_den()
-                vy =(self.n1.den * self.n1.vy + self.n2.den* self.n2.vy + self.n3.den * self.n3.vy + self.n4.den * self.n4.vy)/self.H_den()
-                vz = (self.n1.den * self.n1.vz + self.n2.den* self.n2.vz + self.n3.den * self.n3.vz + self.n4.den * self.n4.vz)/self.H_den()
-                velocity = np.sqrt(vx**2 + vy**2 + vz**2)
-                return velocity
-
-            def H_temp(self):
-                temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp() + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.H_den()
-                return temp
+            print("0")
+    def H_den(self):
+        return self.n1.den + self.n2.den + self.n3.den + self.n4.den
+    print("1")
+    def H_vel(self):
+        vx =(self.n1.den * self.n1.vx + self.n2.den* self.n2.vx + self.n3.den * self.n3.vx + self.n4.den * self.n4.vx)/self.H_den()
+        vy =(self.n1.den * self.n1.vy + self.n2.den* self.n2.vy + self.n3.den * self.n3.vy + self.n4.den * self.n4.vy)/self.H_den()
+        vz = (self.n1.den * self.n1.vz + self.n2.den* self.n2.vz + self.n3.den * self.n3.vz + self.n4.den * self.n4.vz)/self.H_den()
+        velocity = np.sqrt(vx**2 + vy**2 + vz**2)
+        return velocity
+    print("2")
+    def H_temp(self):
+        temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp() + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.H_den()
+        return temp
 
         
 class OHPTdata:
@@ -355,11 +355,13 @@ class OHPTdata:
         temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp(pop2factor) + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.den_total()
         return temp
 
+
+
 try:
 
     #For debugging and so I dont break it when I push the code lol
-    #BATS = getSWMFdata("BATSRUS.dat")
-    BATS = getSWMFdata("MF_line.dat","BATSRUS")
+    BATS1 = getSWMFdata("FLEKS_plasma.dat","BATSRUS",version="BATSRUS1",plasmaonly=True)
+    BATS2 = getSWMFdata("MF_line.dat","BATSRUS",version="BATSRUS2",plasmaonly=False)
     #FLEKS1 = getSWMFdata("FLEKS_line_1.dat","OHPT")
     #FLEKS2 = getSWMFdata("FLEKS_Kin_line.dat","OHPT")
     #FLEKS_out = getSWMFdata("cut.out","OHPT")
