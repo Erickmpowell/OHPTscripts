@@ -250,7 +250,22 @@ class BATSRUSdata_SI:
         self.n3 = NeutralFluid_OH(data,varlist,labels,pop_i = 3)
         self.n4 = NeutralFluid_OH(data,varlist,labels,pop_i = 4)
 
-    
+
+        def H_den(self):
+            return self.n1.den + self.n2.den + self.n3.den + self.n4.den
+
+        def H_vel(self):
+            vx =(self.n1.den * self.n1.vx + self.n2.den* self.n2.vx + self.n3.den * self.n3.vx + self.n4.den * self.n4.vx)/self.H_den()
+            vy =(self.n1.den * self.n1.vy + self.n2.den* self.n2.vy + self.n3.den * self.n3.vy + self.n4.den * self.n4.vy)/self.H_den()
+            vz = (self.n1.den * self.n1.vz + self.n2.den* self.n2.vz + self.n3.den * self.n3.vz + self.n4.den * self.n4.vz)/self.H_den()
+            velocity = np.sqrt(vx**2 + vy**2 + vz**2)
+            return velocity
+
+        def temp_total(self,pop2factor=1):
+            temp = (self.n1.den * self.n1.temp() + self.n2.den* self.n2.temp(pop2factor) + self.n3.den * self.n3.temp() + self.n4.den * self.n4.temp())/self.den_total()
+            return temp
+        
+        
 class OHPTdata:
     def __init__(self, data,varlist):
         try:
